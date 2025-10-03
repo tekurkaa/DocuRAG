@@ -3,6 +3,8 @@
 DocuRAG is an interactive **Retrieval-Augmented Generation (RAG)** tool that lets you process documents or URLs and ask questions about them.  
 It uses **LangChain**, **FAISS**, and **OpenAI embeddings/LLMs** (or you could use any other model of your choice) to provide accurate answers with references to sources.
 
+👉 **Live Demo:** [Click here to try the app](https://atv-docurag.streamlit.app/)
+
 
 ## 🚀 Features
 - Upload documents (`.pdf`, `.txt`, `.docx`) or provide a URL.  
