@@ -41,7 +41,7 @@ It uses **LangChain**, **FAISS**, and **OpenAI embeddings/LLMs** (or you could u
     ```
 
 4. **Set up environment variables** \
-    Create a .env file in the root folder
+    Create a `.env` file in the root folder
     ```
     OPENAI_API_KEY=your_openai_api_key
     ```
