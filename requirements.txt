@@ -8,3 +8,4 @@ libmagic
 python-magic 
 sentence-transformers
 tiktoken
+pypdf
