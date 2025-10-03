@@ -14,7 +14,7 @@ venv/
 .env
 
 # FAISS index storage
-faiss_store_open_ai/
+faiss_store_openai/
 
 # Temporary uploads
 temp/
