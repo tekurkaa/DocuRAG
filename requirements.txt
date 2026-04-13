@@ -1,7 +1,7 @@
 streamlit 
 langchain 
 langchain_community 
-openai 
+langchain-google-genai
 unstructured 
 faiss-cpu
 libmagic 

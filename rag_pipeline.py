@@ -1,10 +1,9 @@
 # Imports
 import os
-from langchain.chains import RetrievalQAWithSourcesChain
-from langchain.text_splitter import RecursiveCharacterTextSplitter
-from langchain.document_loaders import UnstructuredURLLoader, PyPDFLoader, TextLoader, UnstructuredWordDocumentLoader
-from langchain.embeddings import OpenAIEmbeddings
-from langchain.vectorstores import FAISS
+from langchain_classic.chains import RetrievalQAWithSourcesChain
+from langchain_text_splitters import RecursiveCharacterTextSplitter
+from langchain_community.document_loaders import UnstructuredURLLoader, PyPDFLoader, TextLoader, UnstructuredWordDocumentLoader
+from langchain_community.vectorstores import FAISS
 
 
 class RAGPipeline:
@@ -13,12 +12,12 @@ class RAGPipeline:
     chunking, embedding, indexing, and querying documents.
     """
 
-    def __init__(self, llm, embeddings, vectorstore_path="faiss_store_openai"):
+    def __init__(self, llm, embeddings, vectorstore_path="faiss_store_gemini"):
         """
         Initialize the RAG pipeline.
 
         Args:
-            llm: Language model instance (e.g., OpenAI).
+            llm: Language model instance.
             embeddings: Embedding model instance.
             vectorstore_path (str): Path to save/load FAISS index.
         """
