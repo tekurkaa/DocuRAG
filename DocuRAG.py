@@ -40,7 +40,7 @@ def _env_flag(name, default=False):
 
 
 def _build_embeddings(api_key):
-    preferred_model = os.getenv("GEMINI_EMBEDDING_MODEL", "models/gemini-embedding-001")
+    preferred_model = "models/gemini-embedding-001"
     model_candidates = [
         preferred_model,
         "models/gemini-embedding-001",
@@ -66,7 +66,7 @@ def _build_embeddings(api_key):
         except Exception:
             continue
 
-    if _env_flag("ALLOW_LOCAL_EMBEDDING_FALLBACK", default=False):
+    if _env_flag(False):
         local_model = os.getenv("LOCAL_EMBEDDING_MODEL", "sentence-transformers/all-MiniLM-L6-v2")
         st.sidebar.warning(
             "Gemini embeddings are unavailable for this key/API version. "
@@ -88,7 +88,7 @@ if not gemini_api_key:
     st.sidebar.error("Missing Gemini API key. Add GEMINI_API_KEY to your .env file.")
     st.stop()
 
-chat_model = os.getenv("GEMINI_CHAT_MODEL", "gemini-2.5-flash")
+chat_model = "gemini-2.5-flash"
 llm = ChatGoogleGenerativeAI(
     model=chat_model,
     temperature=0.7,
