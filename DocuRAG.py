@@ -30,57 +30,29 @@ process_clicked = st.sidebar.button("🔍 Process data")
 
 
 # ----------------------------------------
-#       INITIALIZE LLM + EMBEDDINGS
+#       INITIALIZE GEMINI CHAT + EMBEDDINGS
 # ----------------------------------------
-def _env_flag(name, default=False):
-    raw_value = os.getenv(name)
-    if raw_value is None:
-        return default
-    return raw_value.strip().lower() in {"1", "true", "yes", "on"}
+CHAT_MODEL = "gemini-2.5-flash-lite"
+EMBEDDING_MODEL = "models/gemini-embedding-001"
 
 
 def _build_embeddings(api_key):
-    preferred_model = "models/gemini-embedding-001"
-    model_candidates = [
-        preferred_model,
-        "models/gemini-embedding-001",
-        "models/embedding-001",
-        "models/text-embedding-004",
-    ]
-
-    checked_models = set()
-    for model_name in model_candidates:
-        if model_name in checked_models:
-            continue
-        checked_models.add(model_name)
-
-        try:
-            embeddings = GoogleGenerativeAIEmbeddings(
-                model=model_name,
-                google_api_key=api_key,
-            )
-            # Probe once so unsupported models fail here, not mid-indexing.
-            embeddings.embed_query("health check")
-            st.sidebar.caption(f"Embedding model: {model_name}")
-            return embeddings
-        except Exception:
-            continue
-
-    if _env_flag(False):
-        local_model = os.getenv("LOCAL_EMBEDDING_MODEL", "sentence-transformers/all-MiniLM-L6-v2")
-        st.sidebar.warning(
-            "Gemini embeddings are unavailable for this key/API version. "
-            f"Using local embeddings: {local_model}."
+    try:
+        embeddings = GoogleGenerativeAIEmbeddings(
+            model=EMBEDDING_MODEL,
+            google_api_key=api_key,
         )
-        from langchain_community.embeddings import HuggingFaceEmbeddings
+        # Probe Gemini Embedding once so unsupported embedding calls fail here, not mid-indexing.
+        embeddings.embed_query("health check")
+        st.sidebar.caption(f"Embedding model: {EMBEDDING_MODEL}")
+        return embeddings
+    except Exception as exc:
+        raise RuntimeError(
+            f"Gemini Embedding could not be used for embeddings ({EMBEDDING_MODEL}). "
+            f"{CHAT_MODEL} is used for chat/generation only. "
+            f"Original error: {exc}"
+        ) from exc
 
-        return HuggingFaceEmbeddings(model_name=local_model)
-
-    raise RuntimeError(
-        "No supported Gemini embedding model is available for this key/API version. "
-        "Try GEMINI_EMBEDDING_MODEL=models/gemini-embedding-001 or models/embedding-001. "
-        "Note: gemini-2.5-flash supports chat/generation, not embeddings."
-    )
 
 
 gemini_api_key = os.getenv("GEMINI_API_KEY") or os.getenv("GOOGLE_API_KEY")
@@ -88,13 +60,12 @@ if not gemini_api_key:
     st.sidebar.error("Missing Gemini API key. Add GEMINI_API_KEY to your .env file.")
     st.stop()
 
-chat_model = "gemini-2.5-flash"
 llm = ChatGoogleGenerativeAI(
-    model=chat_model,
+    model=CHAT_MODEL,
     temperature=0.7,
     google_api_key=gemini_api_key,
 )
-st.sidebar.caption(f"Chat model: {chat_model}")
+st.sidebar.caption(f"Chat model: {CHAT_MODEL}")
 
 try:
     embeddings = _build_embeddings(gemini_api_key)
