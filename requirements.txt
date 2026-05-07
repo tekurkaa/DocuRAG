@@ -1,11 +1,18 @@
-streamlit 
-langchain 
-langchain_community 
+sentence-transformers
+streamlit
+langchain
+langchain_community
 langchain-google-genai
-unstructured 
+unstructured
 faiss-cpu
-libmagic 
-python-magic 
+libmagic
+python-magic
 sentence-transformers
 tiktoken
 pypdf
+
+# Optional / recommended development dependencies
+# (install with `pip install -r requirements-dev.txt` if needed)
+filelock
+tenacity
+pytest
