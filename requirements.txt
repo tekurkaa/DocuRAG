@@ -4,7 +4,12 @@ langchain
 langchain_community
 langchain-google-genai
 unstructured
+spacy>=3.8.0,<4.0
 faiss-cpu
+
+# Note: after installing `spacy`, run the model installer for the English
+# model used by some optional loaders:
+#   python -m spacy download en_core_web_sm
 libmagic
 python-magic
 sentence-transformers

@@ -25,13 +25,29 @@ class LangchainDocumentLoader(DocumentLoader):
 
         # URL loading (simple, with early failure)
         if url:
+            # import the heavy loader lazily and handle import failures separately
             try:
                 from langchain_community.document_loaders import UnstructuredURLLoader
+            except Exception as exc:
+                raise DocumentLoadError(
+                    f"Failed to import UnstructuredURLLoader needed for URL loading: {exc}. "
+                    "Ensure optional package 'langchain_community' and its dependencies are installed."
+                ) from exc
 
+            try:
                 loader = UnstructuredURLLoader(urls=[url])
                 docs.extend(loader.load())
             except Exception as exc:
-                raise DocumentLoadError(f"Failed to load URL {url}: {exc}") from exc
+                # Provide a more actionable error message when spaCy model
+                # installation/permission problems are the root cause.
+                msg = f"Failed to load URL {url}: {exc}"
+                s = str(exc)
+                if "en_core_web_sm" in s or "Failed to install en_core_web_sm" in s or "Permission denied" in s:
+                    msg += (
+                        " Ensure spaCy and the 'en_core_web_sm' model are installed in the environment: "
+                        "run 'pip install spacy' and then 'python -m spacy download en_core_web_sm'."
+                    )
+                raise DocumentLoadError(msg) from exc
 
         # Uploaded file handling: check size first, then parse with LangChain
         if uploaded_file:
