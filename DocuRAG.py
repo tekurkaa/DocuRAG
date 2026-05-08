@@ -5,6 +5,7 @@ import os
 import time
 from dotenv import load_dotenv
 import streamlit as st
+import logging
 from langchain_google_genai import ChatGoogleGenerativeAI, GoogleGenerativeAIEmbeddings
 from rag_pipeline import RAGPipeline
 
@@ -13,6 +14,8 @@ from rag_pipeline import RAGPipeline
 #       SETUP
 # --------------------
 load_dotenv()   # load API keys from .env
+# Reduce verbose transformer logs in deployed environments
+logging.getLogger("transformers").setLevel(logging.ERROR)
 st.set_page_config(page_title="DocuRAG", page_icon="🖥️", layout="wide")   # page name and icon
 st.title("🖥️ DocuRAG")    # page title
 st.markdown("Paste any article URL in the sidebar or upload a file, process them, then ask questions below.")
