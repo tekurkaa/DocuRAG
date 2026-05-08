@@ -10,6 +10,7 @@ python-magic
 sentence-transformers
 tiktoken
 pypdf
+torchvision
 
 # Optional / recommended development dependencies
 # (install with `pip install -r requirements-dev.txt` if needed)
